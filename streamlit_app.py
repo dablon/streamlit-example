@@ -10,12 +10,13 @@ st.title("MapsGeneratorChat")
 
 # Initialize state variables
 chatbot_response = ""
+openai_api_key = ""
 
 # Generate a chatbot response for the given instruction
-def chatbotResponse():
+def chatbotResponse(openai_api_key):
     chat = ChatOpenAI(
         model="gpt-3.5-turbo-16k",
-        api_key="your_openai_api_key_here",  # Replace with your OpenAI API key
+        api_key=openai_api_key,
         temperature=0.7
     )
     system_template = "You are a chatbot designed to generate responses based on given instructions."
@@ -35,8 +36,10 @@ def display_response(chatbot_response):
         st.markdown(chatbot_response)
 
 # Get input from the user
+openai_api_key = st.text_input("Enter your OpenAI API key")
+
 if st.button("Generate Chatbot Response"):
-    chatbot_response = chatbotResponse()
+    chatbot_response = chatbotResponse(openai_api_key)
 
 # Call functions only if all user inputs are taken and the button is clicked.
 display_response(chatbot_response)
