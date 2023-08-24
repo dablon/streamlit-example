@@ -17,9 +17,9 @@ openai_api_key = ""
 def chatbotResponse(openai_api_key):
     try:
         chat = ChatOpenAI(
-            model="gpt-3.5-turbo-16k",
+            model="gpt-3.5-turbo",
             api_key=openai_api_key,
-            temperature=0.7
+            temperature=0.7,
         )
     except ValidationError as e:
         st.error("Invalid API key. Please make sure you have entered a valid OpenAI API key.")
