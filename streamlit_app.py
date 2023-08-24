@@ -1,13 +1,10 @@
 import streamlit as st
-from langchain import LLMChain
 from langchain.chat_models import ChatOpenAI
-from langchain.prompts.chat import (ChatPromptTemplate,
-                                    HumanMessagePromptTemplate,
-                                    SystemMessagePromptTemplate)
-from langchain.document_loaders import *
-from langchain.chains.summarize import load_summarize_chain
-import tempfile
-from langchain.docstore.document import Document
+from langchain.prompts.chat import (
+    ChatPromptTemplate,
+    HumanMessagePromptTemplate,
+    SystemMessagePromptTemplate,
+)
 
 st.title("MapsGeneratorChat")
 
@@ -18,23 +15,23 @@ chatbot_response = ""
 def chatbotResponse():
     chat = ChatOpenAI(
         model="gpt-3.5-turbo-16k",
+        api_key="your_openai_api_key_here",  # Replace with your OpenAI API key
         temperature=0.7
     )
-    system_template = """You are a chatbot designed to generate responses based on given instructions."""
+    system_template = "You are a chatbot designed to generate responses based on given instructions."
     system_message_prompt = SystemMessagePromptTemplate.from_template(system_template)
-    human_template = """Please generate a response for the given instruction."""
+    human_template = "Please generate a response for the given instruction."
     human_message_prompt = HumanMessagePromptTemplate.from_template(human_template)
     chat_prompt = ChatPromptTemplate.from_messages(
         [system_message_prompt, human_message_prompt]
     )
 
-    chain = LLMChain(llm=chat, prompt=chat_prompt)
-    result = chain.run({})
-    return result # returns string   
+    result = chat.generate_response(prompt=chat_prompt)
+    return result  # returns string
 
 # Display the generated chatbot response to the user
 def display_response(chatbot_response):
-    if chatbot_response != "":
+    if chatbot_response:
         st.markdown(chatbot_response)
 
 # Get input from the user
