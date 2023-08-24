@@ -5,6 +5,7 @@ from langchain.prompts.chat import (
     HumanMessagePromptTemplate,
     SystemMessagePromptTemplate,
 )
+from pydantic import ValidationError
 
 st.title("MapsGeneratorChat")
 
@@ -14,11 +15,16 @@ openai_api_key = ""
 
 # Generate a chatbot response for the given instruction
 def chatbotResponse(openai_api_key):
-    chat = ChatOpenAI(
-        model="gpt-3.5-turbo-16k",
-        api_key=openai_api_key,
-        temperature=0.7
-    )
+    try:
+        chat = ChatOpenAI(
+            model="gpt-3.5-turbo-16k",
+            api_key=openai_api_key,
+            temperature=0.7
+        )
+    except ValidationError as e:
+        st.error("Invalid API key. Please make sure you have entered a valid OpenAI API key.")
+        return ""
+
     system_template = "You are a chatbot designed to generate responses based on given instructions."
     system_message_prompt = SystemMessagePromptTemplate.from_template(system_template)
     human_template = "Please generate a response for the given instruction."
