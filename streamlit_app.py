@@ -17,9 +17,9 @@ openai_api_key = ""
 def chatbotResponse(openai_api_key):
     try:
         chat = ChatOpenAI(
-            model="gpt-3.5-turbo",
+            model="gpt-3.5-turbo-16k",
             api_key=openai_api_key,
-            temperature=0.7,
+            temperature=0.7
         )
     except ValidationError as e:
         st.error("Invalid API key. Please make sure you have entered a valid OpenAI API key.")
@@ -33,8 +33,12 @@ def chatbotResponse(openai_api_key):
         [system_message_prompt, human_message_prompt]
     )
 
-    result = chat.generate_response(prompt=chat_prompt)
-    return result  # returns string
+    try:
+        result = chat.generate_response(prompt=chat_prompt)
+        return result  # returns string
+    except Exception as e:
+        st.error("An error occurred while generating chatbot response. Please try again.")
+        return ""
 
 # Display the generated chatbot response to the user
 def display_response(chatbot_response):
